@@ -3,22 +3,24 @@ library(tidytext)
 library(janeaustenr)
 library(stringr)
 library(ggplot2)
-IMDB.DataSet <- read.csv("D:/BU/Fidelity/IMDB Dataset.csv")
-IMDB <- tibble(IMDB.DataSet)
+IMDB.DataSet <- read.csv("IMDB Dataset.csv")
+IMDB <- tibble(IMDB.Dataset)
 
 
 book_words <- IMDB %>% 
   unnest_tokens(word, review)
-
 data(stop_words)
+stop_word <- c("br","SMART")
+stop_words <- rbind(stop_word,stop_words)
+
 
 tidy_books <- book_words %>%
   anti_join(stop_words)
 
-tidy_books %>% count(word, sort = TRUE) 
+h <- tidy_books %>% count(word, sort = TRUE) 
 
 
-tidy_books %>%
+htidy_books %>%
   count(word, sort = TRUE) %>%
   filter(n > 6000) %>%
   mutate(word = reorder(word, n)) %>%
@@ -26,6 +28,5 @@ tidy_books %>%
   geom_col() +
   labs(y = NULL)
 
-
-
+view(stop_words)
 
