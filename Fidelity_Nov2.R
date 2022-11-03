@@ -51,4 +51,15 @@ tidy_books %>%
   labs(y = NULL)
 
 
+##About punctuation
+#unnest the review to sentences
+book_words <- IMDB %>% 
+   unnest_tokens(sentence, review, token = "sentences")
+
+
+#count frequency of punctuation
+devtools::install_github("Amherst-Statistics/katherinemansfieldr")
+library(katherinemansfieldr)
+char <- extract_punct(book_words$sentence)
+charfreq(char, c(".", "...", "?","!"), punctuation = TRUE)
 
