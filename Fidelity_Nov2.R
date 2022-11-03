@@ -61,5 +61,11 @@ book_words <- IMDB %>%
 devtools::install_github("Amherst-Statistics/katherinemansfieldr")
 library(katherinemansfieldr)
 char <- extract_punct(book_words$sentence)
-puncfreq <- charfreq(char, c(".", "...", "?","!"), punctuation = TRUE)
+puncfreq <- charfreq(char, c('...', '?','!','"'), punctuation = TRUE)
 
+#graph
+puncfreq %>%
+  ggplot(aes(
+character, freq)) +
+  geom_col() +
+  labs(y = NULL)
