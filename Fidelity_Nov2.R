@@ -60,6 +60,6 @@ book_words <- IMDB %>%
 #count frequency of punctuation
 devtools::install_github("Amherst-Statistics/katherinemansfieldr")
 library(katherinemansfieldr)
-punc <- extract_punct(book_words$sentence)
-puncfreq(punc, c(".", "...", "?","!"), punctuation = TRUE)
+char <- extract_punct(book_words$sentence)
+puncfreq <- charfreq(char, c(".", "...", "?","!"), punctuation = TRUE)
 
