@@ -5,6 +5,8 @@ library(stringr)
 library(ggplot2)
 library(topicmodels)
 library(tm)
+library(clue)
+library(skmeans)
 IMDB.Dataset <- read.csv("D:/BU/Fidelity/Fidelity Project/IMDB Dataset.csv")
 IMDB <- tibble(IMDB.Dataset)
 
@@ -24,6 +26,18 @@ imdb_dtm <- IMDB %>%
   anti_join(stop_words)%>%
   count(docs, word) %>%
   cast_dtm(docs, word, n)
+
+soft.part <- skmeans(imdb_dtm,3,m=1.2,control = list(nruns=1,verbose=T))
+
+par(mfrow=c(1,2))
+barplot(table(soft.part$cluster),main='Spherical K-means')
+plotcluster(cmdscale(dist(wk.dtm)),soft.part$cluster)
+par(mfrow=c(1,2))
+
+plot(silhouette(soft.part))
+
+s.clus.proto<-t(cl_prototypes(soft.part))
+comparison.cloud(s.clus.proto,max.words = 100)
 
 
 
@@ -47,8 +61,9 @@ ap_lda_compare <- n_topics %>%
  
 perplexity(ap_lda_compare)
 
-plot(n_topics,ap_lda_compare)
-
+ggplot(aes(x = n_topics, y = perplexity(ap_lda_compare))) +
+  geom_point() +
+  geom_smooth(se = FALSE)
 
 
  
