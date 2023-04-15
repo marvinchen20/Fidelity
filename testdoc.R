@@ -28,6 +28,9 @@ library(ldatuning)
 # Load packages
 library(BTM)
 library(tm)
+library(proxy)
+library(cluster)
+library(dbscan)
 
 # Create a simple example dataset
 data <- data.frame(
@@ -56,6 +59,9 @@ dtm <- DocumentTermMatrix(corpus)
 
 # Convert DocumentTermMatrix to a regular matrix
 dtm_matrix <- as.matrix(dtm)
+dist_matrix <- proxy::dist(as.matrix(dtm), method = "cosine")
+
+result <- dbscan(dtm_matrix,0.1, )
 
 # Convert dtm_matrix to a list of document-word pairs
 doc_word_pairs <- lapply(1:nrow(dtm_matrix), function(x) {
@@ -90,6 +96,26 @@ coherence_values_lda <- coherence(lda_model, method = "UMass", M = NULL)
 
 
 btm_coherence(lda_model,dtm_matrix,10)
+########
+data <- data.frame(
+  category1 = c("A", "A", "A", "B", "B", "B", "C", "C", "C"),
+  category2 = c("X", "Y", "Y", "X", "X", "Y", "Y", "Y", "X")
+)
+contingency_table <- table(data$category1, data$category2)
+print(contingency_table)
+chi_square_test <- chisq.test(contingency_table)
+# Chi-square statistic
+chi_square_statistic <- chi_square_test$statistic
+cat("Chi-square statistic:", chi_square_statistic, "\n")
+
+# Degrees of freedom
+degrees_of_freedom <- chi_square_test$parameter
+cat("Degrees of freedom:", degrees_of_freedom, "\n")
+
+# P-value
+p_value <- chi_square_test$p.value
+cat("P-value:", p_value, "\n")
+
 
 
 
